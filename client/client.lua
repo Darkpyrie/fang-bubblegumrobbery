@@ -1,4 +1,4 @@
-    local models = {
+local models = {
     785076010, 
     1243022785, 
     462203053 ,
@@ -28,8 +28,16 @@ local function progressBar(data)
             clip = 'pick_door',
         },
     }) then 
-        lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', false, data.entity, true)
-        lib.callback.await('fang-bubblerobbery:server:giveMoney')
+        local success = lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', data.entity, true)
+        if not success then
+            lib.notify({
+                title = 'Error',
+                description = 'Well bro, wtf? You tryna rob a robbed machine?',
+                type = 'error'
+            })
+            return 
+        end
+        lib.callback('fang-bubblerobbery:server:giveMoney', data.entity)
         lib.notify({
             title = 'Success',
             description = 'You stole change... wtf is wrong with you',

@@ -8,6 +8,6 @@ return {
     },
 
     Price = 30,
-
+    Distance = 2.5,
     Cooldown = 90
 }
