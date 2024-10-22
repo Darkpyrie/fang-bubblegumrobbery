@@ -28,7 +28,7 @@ local function progressBar(data)
             clip = 'pick_door',
         },
     }) then 
-        local success = lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', data.entity, true)
+        local success = lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', false, data, true)
         if not success then
             lib.notify({
                 title = 'Error',
@@ -37,7 +37,7 @@ local function progressBar(data)
             })
             return 
         end
-        lib.callback('fang-bubblerobbery:server:giveMoney', data.entity)
+        lib.callback.await('fang-bubblerobbery:server:giveMoney', false, data)
         lib.notify({
             title = 'Success',
             description = 'You stole change... wtf is wrong with you',
@@ -53,14 +53,18 @@ local function setupBuyTargets()
         {
             label = 'Buy a random ball',
             icon = 'fa-solid fa-dollar-sign',
-            onSelect = function()
-            lib.callback.await('fang-bubblerobbery:server:giveItem')
+            onSelect = function(data)
+                lib.callback.await('fang-bubblerobbery:server:giveItem', false, data)
             end
         },
         {
             label = 'Steal some change',
             icon = 'fa-solid fa-sack-dollar',
             items = 'lockpick',
+            canInteract = function(entity)
+                local isRobbed = lib.callback.await('fang-bubblegumrobbery:server:getRobbedMachines', false, entity)
+                return not isRobbed
+            end,
             onSelect = function(data)
                 local isRobbed = lib.callback.await('fang-bubblegumrobbery:server:getRobbedMachines', false, data.entity)
                 if isRobbed then
@@ -87,4 +91,3 @@ end
 CreateThread(function()
     setupBuyTargets() --sets up targets to buy gumballs
 end)
-
