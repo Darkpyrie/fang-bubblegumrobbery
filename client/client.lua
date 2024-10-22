@@ -28,21 +28,22 @@ local function progressBar(data)
             clip = 'pick_door',
         },
     }) then 
-        local success = lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', false, data, true)
-        if not success then
-            lib.notify({
-                title = 'Error',
-                description = 'Well bro, wtf? You tryna rob a robbed machine?',
-                type = 'error'
-            })
-            return 
-        end
-        lib.callback.await('fang-bubblerobbery:server:giveMoney', false, data)
+    lib.callback.await('fang-bubblerobbery:server:giveMoney', false, data)
+    local success = lib.callback.await('fang-bubblegumrobbery:server:setRobbedStatus', false, data, true)
+    if not success then
         lib.notify({
-            title = 'Success',
-            description = 'You stole change... wtf is wrong with you',
-            type = 'success'
-        }) 
+            title = 'Error',
+            description = 'Well bro, wtf? You tryna rob a robbed machine?',
+            type = 'error'
+        })
+        return 
+    end
+    
+    lib.notify({
+        title = 'Success',
+        description = 'You stole change... wtf is wrong with you',
+        type = 'success'
+    }) 
     end
 end
 
